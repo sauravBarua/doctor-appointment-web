@@ -41,3 +41,11 @@ export function refreshSession(): Promise<SessionPayload> {
     });
   return inflight;
 }
+
+export function changePasswordRequest(input: { currentPassword: string; newPassword: string }) {
+  return callSession({ method: 'POST', url: '/change-password', data: input });
+}
+
+export function googleExchangeRequest(code: string) {
+  return callSession({ method: 'POST', url: '/google', data: { code } });
+}

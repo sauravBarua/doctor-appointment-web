@@ -1,7 +1,7 @@
 'use client';
 
 import { revalidateLogic, useForm } from '@tanstack/react-form';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -24,6 +24,7 @@ import { Label } from '@/components/ui/label';
 import { errorMessage, toApiError } from '@/lib/api/errors';
 import { safeNext } from '@/lib/safe-next';
 import { useSessionStore } from '@/stores/session';
+import { GoogleButton } from './google-button';
 import { useLogin } from './hooks';
 
 const loginSchema = z.object({
@@ -33,13 +34,15 @@ const loginSchema = z.object({
 
 function loginErrorMessage(error: unknown): string {
   const apiError = toApiError(error);
-  if (apiError.status === 401) return 'E-mail ou mot de passe incorrect.';
+  if (apiError.status === 401 || apiError.code === 'INVALID_CREDENTIALS')
+    return 'E-mail ou mot de passe incorrect.';
   return errorMessage(apiError);
 }
 
 export function LoginForm() {
   const router = useRouter();
   const next = safeNext(useSearchParams().get('next'));
+  const verified = useSearchParams().get('verified') === '1';
   const status = useSessionStore((s) => s.status);
   const login = useLogin();
 
@@ -57,8 +60,11 @@ export function LoginForm() {
         await login.mutateAsync({ email: value.email.trim(), password: value.password });
         toast.success('Connexion réussie');
         router.replace(next);
-      } catch {
-        // The error is rendered from `login.error` below.
+      } catch (error) {
+        // An unverified account goes to the code screen; other errors render below.
+        if (toApiError(error).code === 'EMAIL_NOT_VERIFIED') {
+          router.push(`/verify-email?email=${encodeURIComponent(value.email.trim())}`);
+        }
       }
     },
   });
@@ -69,7 +75,7 @@ export function LoginForm() {
         <CardTitle className="font-display text-2xl">Connexion</CardTitle>
         <CardDescription>Accédez à vos rendez-vous.</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="grid gap-4">
         <form
           noValidate
           className="grid gap-4"
@@ -79,6 +85,13 @@ export function LoginForm() {
             void form.handleSubmit();
           }}
         >
+          {verified ? (
+            <Alert>
+              <CheckCircle2 />
+              <AlertDescription>Votre e-mail est vérifié. Connectez-vous.</AlertDescription>
+            </Alert>
+          ) : null}
+
           {login.error ? (
             <Alert variant="destructive">
               <AlertCircle />
@@ -130,6 +143,7 @@ export function LoginForm() {
             {login.isPending ? 'Connexion…' : 'Se connecter'}
           </Button>
         </form>
+        <GoogleButton mode="signin" />
       </CardContent>
       <CardFooter className="text-muted-foreground justify-center gap-1 text-sm">
         Pas encore de compte ?

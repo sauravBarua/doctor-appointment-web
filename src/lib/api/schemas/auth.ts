@@ -32,3 +32,16 @@ export const sessionPayloadSchema = z.object({
   user: sessionUserSchema,
 });
 export type SessionPayload = z.infer<typeof sessionPayloadSchema>;
+
+// What the API returns after a password change (new tokens).
+export const apiChangePasswordSchema = z.object({
+  accessToken: z.string(),
+  sessionToken: z.string(),
+});
+
+// What the API returns from the Google code exchange (user may be omitted).
+export const apiGoogleSchema = z.object({
+  accessToken: z.string(),
+  sessionToken: z.string(),
+  user: sessionUserSchema.optional(),
+});
