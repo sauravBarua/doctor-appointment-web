@@ -1,74 +1,111 @@
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { BellRing, CalendarCheck, Clock } from 'lucide-react';
-import { DesignCheck } from '@/components/design-check';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { fetchDoctors, fetchSpecialties } from '@/features/catalog/api';
+import { DoctorCard } from '@/features/catalog/doctor-card';
+import { SpecialtyCard } from '@/features/catalog/specialty-card';
 
-const FEATURES = [
-  {
-    icon: CalendarCheck,
-    title: 'Disponibilités en direct',
-    text: 'Des créneaux de 30 minutes qui disparaissent dès que quelqu’un les réserve.',
-  },
-  {
-    icon: Clock,
-    title: 'Toujours à l’heure de Paris',
-    text: 'Chaque créneau et chaque rendez-vous s’affiche dans le fuseau horaire de la clinique. Aucune conversion.',
-  },
-  {
-    icon: BellRing,
-    title: 'Notifications instantanées',
-    text: 'Soyez averti dès qu’un rendez-vous est réservé ou annulé.',
-  },
-] as const;
+export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
+// The home page must still render when the API is down.
+async function safe<T>(promise: Promise<T>): Promise<T | null> {
+  try {
+    return await promise;
+  } catch {
+    return null;
+  }
+}
+
+export default async function HomePage() {
+  const [specialties, doctors] = await Promise.all([
+    safe(fetchSpecialties({ page: 1, pageSize: 6 })),
+    safe(fetchDoctors({ page: 1 })),
+  ]);
+
   return (
     <>
-      <section className="relative isolate overflow-hidden">
+      <section className="relative isolate overflow-hidden border-b">
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_50%_0%,color-mix(in_oklab,var(--primary)_14%,transparent),transparent)]"
+          className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_50%_0%,color-mix(in_oklab,var(--primary)_16%,transparent),transparent)]"
         />
-        <div className="mx-auto max-w-6xl px-4 py-20 text-center md:py-28">
-          <Badge variant="secondary" className="mb-6">
-            Paris · Réservation en ligne
-          </Badge>
-          <h1 className="font-display mx-auto max-w-3xl text-4xl font-semibold tracking-tight text-balance md:text-6xl">
-            Votre prochain rendez-vous, réservé en moins d’une minute.
+        <div className="mx-auto grid max-w-3xl gap-6 px-4 py-20 text-center sm:py-28">
+          <h1 className="font-display text-4xl tracking-tight text-balance sm:text-5xl">
+            Prenez rendez-vous avec le bon médecin, en quelques minutes.
           </h1>
-          <p className="text-muted-foreground mx-auto mt-6 max-w-xl text-lg text-pretty">
-            Trouvez un spécialiste, choisissez un créneau libre et recevez une confirmation
-            immédiate.
+          <p className="text-muted-foreground text-lg text-balance">
+            Choisissez une spécialité, comparez les disponibilités et réservez en ligne.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button asChild size="lg">
-              <Link href="/doctors">Trouver un médecin</Link>
+          <form
+            action="/doctors"
+            method="get"
+            role="search"
+            className="mx-auto flex w-full max-w-lg gap-2"
+          >
+            <Label htmlFor="hero-q" className="sr-only">
+              Rechercher un médecin
+            </Label>
+            <Input
+              id="hero-q"
+              name="q"
+              placeholder="Nom du médecin…"
+              autoComplete="off"
+              className="h-11"
+            />
+            <Button type="submit" size="lg">
+              Rechercher
             </Button>
-            <Button asChild size="lg" variant="outline">
-              <Link href="/register">Créer un compte</Link>
-            </Button>
-          </div>
+          </form>
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-4 px-4 pb-20 md:grid-cols-3">
-        {FEATURES.map(({ icon: Icon, title, text }) => (
-          <Card key={title}>
-            <CardHeader>
-              <div className="bg-accent text-accent-foreground mb-2 flex size-10 items-center justify-center rounded-lg">
-                <Icon className="size-5" aria-hidden />
-              </div>
-              <CardTitle className="font-display text-xl">{title}</CardTitle>
-              <CardDescription>{text}</CardDescription>
-            </CardHeader>
-            <CardContent />
-          </Card>
-        ))}
-      </section>
+      {specialties && specialties.items.length > 0 ? (
+        <section className="mx-auto w-full max-w-6xl px-4 py-14" aria-labelledby="home-specialties">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <h2 id="home-specialties" className="font-display text-2xl tracking-tight">
+              Spécialités
+            </h2>
+            <Link
+              href="/specialties"
+              className="text-primary inline-flex items-center gap-1 text-sm hover:underline"
+            >
+              Tout voir <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {specialties.items.map((specialty) => (
+              <li key={specialty.id}>
+                <SpecialtyCard specialty={specialty} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
-      <DesignCheck />
+      {doctors && doctors.items.length > 0 ? (
+        <section className="mx-auto w-full max-w-6xl px-4 pb-16" aria-labelledby="home-doctors">
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <h2 id="home-doctors" className="font-display text-2xl tracking-tight">
+              Médecins à la une
+            </h2>
+            <Link
+              href="/doctors"
+              className="text-primary inline-flex items-center gap-1 text-sm hover:underline"
+            >
+              Tout voir <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {doctors.items.slice(0, 6).map((doctor) => (
+              <li key={doctor.id}>
+                <DoctorCard doctor={doctor} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </>
   );
 }
