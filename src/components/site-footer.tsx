@@ -7,7 +7,7 @@ export function SiteFooter() {
         <p>
           © {new Date().getFullYear()} {SITE.name}
         </p>
-        <p>All times are shown in Paris time ({SITE.timezone}).</p>
+        <p>Tous les horaires sont affichés à l’heure de Paris ({SITE.timezone}).</p>
       </div>
     </footer>
   );

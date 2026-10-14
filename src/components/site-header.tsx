@@ -12,7 +12,7 @@ export function SiteHeader() {
         <Link href="/" className="font-display text-xl font-semibold tracking-tight">
           {SITE.name}
         </Link>
-        <nav aria-label="Main" className="ml-6 hidden items-center gap-1 md:flex">
+        <nav aria-label="Navigation principale" className="ml-6 hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -26,10 +26,10 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
-            <Link href="/login">Sign in</Link>
+            <Link href="/login">Se connecter</Link>
           </Button>
           <Button asChild>
-            <Link href="/register">Get started</Link>
+            <Link href="/register">Commencer</Link>
           </Button>
         </div>
       </div>

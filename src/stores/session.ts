@@ -1,16 +1,9 @@
 'use client';
 
 import { create } from 'zustand';
+import type { SessionUser } from '@/lib/api/schemas/auth';
 
-export type Role = 'ADMIN' | 'DOCTOR' | 'PATIENT';
-
-export interface SessionUser {
-  id: string;
-  name: string;
-  email: string;
-  role: Role;
-  image: string | null;
-}
+export type { Role, SessionUser } from '@/lib/api/schemas/auth';
 
 type Status = 'loading' | 'authenticated' | 'anonymous';
 
@@ -23,8 +16,8 @@ interface SessionState {
   clear: () => void;
 }
 
-// Client-only. Never call setSession/clear during server rendering: the module instance
-// is shared across requests on the server. Only effects and event handlers write to it.
+// Client-only. Never write to it while rendering on the server: the module instance is
+// shared across requests there. Only effects and event handlers call these setters.
 export const useSessionStore = create<SessionState>()((set) => ({
   status: 'loading',
   accessToken: null,

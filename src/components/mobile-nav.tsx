@@ -17,7 +17,7 @@ export function MobileNav() {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+        <Button variant="ghost" size="icon" className="md:hidden" aria-label="Ouvrir le menu">
           <Menu className="size-5" />
         </Button>
       </SheetTrigger>
@@ -25,7 +25,7 @@ export function MobileNav() {
         <SheetHeader>
           <SheetTitle className="font-display text-xl">{SITE.name}</SheetTitle>
         </SheetHeader>
-        <nav aria-label="Mobile" className="flex flex-col gap-1 px-4">
+        <nav aria-label="Navigation mobile" className="flex flex-col gap-1 px-4">
           {NAV_LINKS.map((link) => (
             <SheetClose asChild key={link.href}>
               <Link
@@ -40,7 +40,7 @@ export function MobileNav() {
         <div className="mt-auto flex flex-col gap-2 p-4">
           <SheetClose asChild>
             <Button asChild variant="outline">
-              <Link href="/login">Sign in</Link>
+              <Link href="/login">Se connecter</Link>
             </Button>
           </SheetClose>
         </div>
