@@ -67,7 +67,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # Off by default: set the repository variable RUN_E2E=true once the prerequisites below exist.
   e2e:
     needs: quality
     if: ${{ vars.RUN_E2E == 'true' }}
