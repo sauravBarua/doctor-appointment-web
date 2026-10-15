@@ -16,6 +16,7 @@ import {
 import { SITE } from '@/config/site';
 import { useLogout } from '@/features/auth/hooks';
 import { ROLE_LABELS } from '@/features/auth/labels';
+import { NotificationBell } from '@/features/notifications/notification-bell';
 import { useSessionStore } from '@/stores/session';
 
 function initials(name: string) {
@@ -39,6 +40,7 @@ export function AppHeader() {
         </Link>
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
+          {user && !user.mustChangePassword ? <NotificationBell /> : null}
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

@@ -49,3 +49,21 @@ export const weekdayShort = (ymd: string) =>
   fmt('UTC', { weekday: 'short' }).format(noon(ymd)).replace('.', '');
 
 export const dayNumber = (ymd: string) => String(Number(ymd.slice(8, 10)));
+
+const relativeFormat = new Intl.RelativeTimeFormat(SITE.locale, { numeric: 'auto' });
+
+// "à l’instant", "il y a 5 minutes", "hier", then a plain date after a week.
+export function relativeTime(iso: string, now: Date = new Date()): string {
+  const seconds = Math.round((new Date(iso).getTime() - now.getTime()) / 1000);
+  const abs = Math.abs(seconds);
+  if (abs < 45) return 'à l’instant';
+  if (abs < 3600) return relativeFormat.format(Math.round(seconds / 60), 'minute');
+  if (abs < 86_400) return relativeFormat.format(Math.round(seconds / 3600), 'hour');
+  if (abs < 7 * 86_400) return relativeFormat.format(Math.round(seconds / 86_400), 'day');
+  return new Intl.DateTimeFormat(SITE.locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: SITE.timezone,
+  }).format(new Date(iso));
+}
