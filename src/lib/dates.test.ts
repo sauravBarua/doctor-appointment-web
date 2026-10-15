@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addDays, formatDateLong, formatTime, todayIn } from './dates';
+import { addDays, formatDateLong, formatDateTime, formatTime, todayIn } from './dates';
 
 describe('dates', () => {
   it('formate une heure dans le fuseau de la clinique', () => {
@@ -20,5 +20,11 @@ describe('dates', () => {
 
   it('ajoute des jours en passant les fins de mois', () => {
     expect(addDays('2026-10-30', 3)).toBe('2026-11-02');
+  });
+
+  it('formate date et heure dans le fuseau demandé', () => {
+    const text = formatDateTime('2026-10-15T10:23:00.000Z', 'Europe/Paris');
+    expect(text).toContain('12:23');
+    expect(text).toContain('2026');
   });
 });

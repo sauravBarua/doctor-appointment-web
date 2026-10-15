@@ -1,11 +1,15 @@
 import type { Route } from 'next';
 import {
   Bell,
+  Building2,
   CalendarClock,
   CalendarDays,
   CalendarOff,
+  HeartPulse,
   LayoutDashboard,
+  ScrollText,
   Search,
+  Stethoscope,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -46,11 +50,21 @@ const DOCTOR: NavGroup = {
   ],
 };
 
+const ADMIN: NavGroup = {
+  label: 'Administration',
+  items: [
+    { href: '/admin/doctors', label: 'Médecins', icon: Stethoscope },
+    { href: '/admin/clinics', label: 'Cliniques', icon: Building2 },
+    { href: '/admin/specialties', label: 'Spécialités', icon: HeartPulse },
+    { href: '/admin/audit-logs', label: 'Journal d’audit', icon: ScrollText },
+  ],
+};
+
 export function navFor(role: NavRole | undefined): NavGroup[] {
   const groups = [GENERAL];
   if (role === 'PATIENT') groups.push(PATIENT);
   if (role === 'DOCTOR') groups.push(DOCTOR);
-  // ADMIN group is added in F6.
+  if (role === 'ADMIN') groups.push(ADMIN);
   return groups;
 }
 

@@ -19,6 +19,18 @@ describe('navFor', () => {
     expect(hrefs('DOCTOR')).not.toContain('/appointments');
   });
 
+  it('gives admins the administration section only', () => {
+    expect(hrefs('ADMIN')).toEqual(
+      expect.arrayContaining([
+        '/admin/doctors',
+        '/admin/clinics',
+        '/admin/specialties',
+        '/admin/audit-logs',
+      ]),
+    );
+    expect(hrefs('ADMIN')).not.toContain('/appointments');
+  });
+
   it('falls back to the general group without a role', () => {
     expect(hrefs(undefined)).toEqual(['/dashboard', '/notifications']);
   });

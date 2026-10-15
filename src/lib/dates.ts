@@ -106,3 +106,12 @@ export function formatPeriod(start: string, end: string, timeZone: string): stri
   }
   return `Du ${formatDateLong(start, timeZone)} à ${formatTime(start, timeZone)} au ${formatDateLong(end, timeZone)} à ${formatTime(end, timeZone)}`;
 }
+
+export const formatDateTime = (iso: string, timeZone: string) =>
+  fmt(timeZone, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(iso));
