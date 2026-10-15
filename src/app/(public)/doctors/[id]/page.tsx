@@ -2,26 +2,13 @@ import { Clock, ExternalLink, MapPin } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { cache } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { fetchDoctor } from '@/features/catalog/api';
 import { DoctorAvatar } from '@/features/catalog/doctor-avatar';
-import { toApiError } from '@/lib/api/errors';
+import { getDoctor } from '@/features/catalog/get-doctor';
 
 export const dynamic = 'force-dynamic';
-
-// One fetch per request, shared by generateMetadata and the page.
-const getDoctor = cache(async (id: string) => {
-  try {
-    return await fetchDoctor(id);
-  } catch (error) {
-    const apiError = toApiError(error);
-    if (apiError.status === 404 || apiError.status === 400) return null; // unknown or malformed id
-    throw apiError;
-  }
-});
 
 export async function generateMetadata({
   params,

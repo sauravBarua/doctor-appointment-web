@@ -58,6 +58,14 @@ export function AppHeader() {
                   </Badge>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard">Tableau de bord</Link>
+                </DropdownMenuItem>
+                {user.role === 'PATIENT' ? (
+                  <DropdownMenuItem asChild>
+                    <Link href="/appointments">Mes rendez-vous</Link>
+                  </DropdownMenuItem>
+                ) : null}
                 <DropdownMenuItem onSelect={() => logout.mutate()}>
                   <LogOut className="size-4" /> Se déconnecter
                 </DropdownMenuItem>

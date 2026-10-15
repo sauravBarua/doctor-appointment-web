@@ -1,4 +1,4 @@
-import { api } from '@/lib/api/client';
+import { publicApi as api } from '@/lib/api/http';
 import { parseList } from '@/lib/api/list';
 import { parseData } from '@/lib/api/parse';
 import { clinicSchema, doctorSchema, specialtySchema } from '@/lib/api/schemas/catalog';
