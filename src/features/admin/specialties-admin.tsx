@@ -11,11 +11,11 @@ import { useCatalogParams } from '@/features/catalog/use-catalog-params';
 import type { AdminSpecialty } from '@/lib/api/schemas/admin';
 import { specialties } from './api';
 import { AdminList } from './admin-list';
-import { fieldErrors } from './form-errors';
+import { fieldErrors } from '@/lib/form-errors';
 import { FormBody, FormDialog } from './form-dialog';
 import { useAdminSpecialties, useRemove, useSave, useToggleActive } from './hooks';
-import { ImageField } from './image-field';
-import { LabeledInput } from './labeled-input';
+import { ImageField } from '@/components/image-field';
+import { LabeledInput } from '@/components/labeled-input';
 import { RowActions } from './row-actions';
 import { StatusBadge } from './status-badge';
 

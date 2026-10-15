@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { NAV_LINKS, SITE } from '@/config/site';
+import { HeaderActions } from './header-actions';
 import { MobileNav } from './mobile-nav';
 import { ThemeToggle } from './theme-toggle';
 
@@ -25,12 +25,7 @@ export function SiteHeader() {
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
-          <Button asChild variant="ghost" className="hidden sm:inline-flex">
-            <Link href="/login">Se connecter</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/register">Commencer</Link>
-          </Button>
+          <HeaderActions />
         </div>
       </div>
     </header>

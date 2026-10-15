@@ -13,6 +13,7 @@ interface SessionState {
   user: SessionUser | null;
   setSession: (payload: { accessToken: string; user: SessionUser }) => void;
   setAccessToken: (accessToken: string) => void;
+  setUser: (user: SessionUser) => void;
   clear: () => void;
 }
 
@@ -24,5 +25,6 @@ export const useSessionStore = create<SessionState>()((set) => ({
   user: null,
   setSession: ({ accessToken, user }) => set({ status: 'authenticated', accessToken, user }),
   setAccessToken: (accessToken) => set({ accessToken }),
+  setUser: (user) => set({ user }),
   clear: () => set({ status: 'anonymous', accessToken: null, user: null }),
 }));

@@ -32,7 +32,7 @@ describe('navFor', () => {
   });
 
   it('falls back to the general group without a role', () => {
-    expect(hrefs(undefined)).toEqual(['/dashboard', '/notifications']);
+    expect(hrefs(undefined)).toEqual(['/dashboard', '/notifications', '/profile']);
   });
 });
 

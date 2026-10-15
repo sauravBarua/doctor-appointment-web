@@ -12,11 +12,11 @@ import { SITE } from '@/config/site';
 import { clinics } from './api';
 import { AdminList } from './admin-list';
 import { clinicFormSchema } from './clinic-form';
-import { fieldErrors } from './form-errors';
+import { fieldErrors } from '@/lib/form-errors';
 import { FormBody, FormDialog } from './form-dialog';
 import { useAdminClinics, useRemove, useSave, useToggleActive } from './hooks';
-import { ImageField } from './image-field';
-import { LabeledInput } from './labeled-input';
+import { ImageField } from '@/components/image-field';
+import { LabeledInput } from '@/components/labeled-input';
 import { RowActions } from './row-actions';
 import { StatusBadge } from './status-badge';
 

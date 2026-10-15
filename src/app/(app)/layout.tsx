@@ -1,8 +1,11 @@
+import type { Metadata } from 'next';
 import { AppHeader } from '@/components/app-header';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AppGate } from '@/features/auth/app-gate';
 import { AppSidebar } from '@/features/navigation/app-sidebar';
+
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (

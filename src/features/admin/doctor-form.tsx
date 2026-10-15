@@ -15,11 +15,11 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import type { AdminDoctor } from '@/lib/api/schemas/admin';
 import { doctors } from './api';
-import { fieldErrors } from './form-errors';
+import { fieldErrors } from '@/lib/form-errors';
 import { FormBody, FormDialog } from './form-dialog';
 import { useClinicOptions, useCreateDoctor, useSave, useSpecialtyOptions } from './hooks';
-import { ImageField } from './image-field';
-import { LabeledInput } from './labeled-input';
+import { ImageField } from '@/components/image-field';
+import { LabeledInput } from '@/components/labeled-input';
 
 export interface DoctorFormState {
   doctor?: AdminDoctor;

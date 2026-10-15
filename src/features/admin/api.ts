@@ -9,7 +9,7 @@ import {
   auditLogSchema,
   createDoctorResultSchema,
 } from '@/lib/api/schemas/admin';
-import { toFormData } from './form-data';
+import { toFormData } from '@/lib/api/form-data';
 
 export const ADMIN_PAGE_SIZE = 20;
 

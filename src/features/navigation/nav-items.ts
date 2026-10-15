@@ -10,6 +10,7 @@ import {
   ScrollText,
   Search,
   Stethoscope,
+  UserRound,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -30,6 +31,7 @@ const GENERAL: NavGroup = {
   items: [
     { href: '/dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
     { href: '/notifications', label: 'Notifications', icon: Bell },
+    { href: '/profile', label: 'Mon profil', icon: UserRound },
   ],
 };
 

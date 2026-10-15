@@ -63,6 +63,9 @@ export function AppHeader() {
                 <DropdownMenuItem asChild>
                   <Link href="/dashboard">Tableau de bord</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile">Mon profil</Link>
+                </DropdownMenuItem>
                 {user.role === 'PATIENT' ? (
                   <DropdownMenuItem asChild>
                     <Link href="/appointments">Mes rendez-vous</Link>

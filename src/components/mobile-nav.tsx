@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { Menu } from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -12,8 +12,11 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { NAV_LINKS, SITE } from '@/config/site';
+import { useSessionStore } from '@/stores/session';
 
 export function MobileNav() {
+  const status = useSessionStore((s) => s.status);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -38,11 +41,19 @@ export function MobileNav() {
           ))}
         </nav>
         <div className="mt-auto flex flex-col gap-2 p-4">
-          <SheetClose asChild>
-            <Button asChild variant="outline">
-              <Link href="/login">Se connecter</Link>
-            </Button>
-          </SheetClose>
+          {status === 'authenticated' ? (
+            <SheetClose asChild>
+              <Button asChild>
+                <Link href="/dashboard">Mon espace</Link>
+              </Button>
+            </SheetClose>
+          ) : status === 'anonymous' ? (
+            <SheetClose asChild>
+              <Button asChild variant="outline">
+                <Link href="/login">Se connecter</Link>
+              </Button>
+            </SheetClose>
+          ) : null}
         </div>
       </SheetContent>
     </Sheet>
