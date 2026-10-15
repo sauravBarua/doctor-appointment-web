@@ -30,8 +30,9 @@ const capitalizeFirst = capitalize;
 
 // Where a notification leads. Doctor and admin destinations arrive with their portals.
 export function notificationHref(notification: AppNotification, role?: Role): string | null {
-  if (role !== 'PATIENT') return null;
-  return notification.type === 'APPOINTMENT_CANCELLED'
-    ? '/appointments?tab=cancelled'
-    : '/appointments';
+  const cancelled = notification.type === 'APPOINTMENT_CANCELLED';
+  if (role === 'PATIENT') return cancelled ? '/appointments?tab=cancelled' : '/appointments';
+  if (role === 'DOCTOR')
+    return cancelled ? '/doctor/appointments?tab=cancelled' : '/doctor/appointments';
+  return null;
 }

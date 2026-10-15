@@ -24,9 +24,11 @@ import { useCancel } from './hooks';
 export function CancelDialog({
   appointment,
   onClose,
+  viewer = 'PATIENT',
 }: {
   appointment: Appointment | null;
   onClose: () => void;
+  viewer?: 'PATIENT' | 'DOCTOR';
 }) {
   const cancel = useCancel();
   const [reason, setReason] = useState('');
@@ -55,9 +57,10 @@ export function CancelDialog({
           <AlertDialogTitle>Annuler ce rendez-vous ?</AlertDialogTitle>
           <AlertDialogDescription>
             {appointment
-              ? `${appointment.doctor.name} · ${capitalize(formatDateLong(appointment.startTime, appointment.timezone))} à ${formatTime(appointment.startTime, appointment.timezone)}. `
+              ? `${viewer === 'DOCTOR' ? appointment.patient.name : appointment.doctor.name} · ${capitalize(formatDateLong(appointment.startTime, appointment.timezone))} à ${formatTime(appointment.startTime, appointment.timezone)}. `
               : ''}
-            Le créneau sera libéré pour d’autres patients.
+            {viewer === 'DOCTOR' ? 'Le patient sera prévenu. ' : ''}Le créneau sera libéré pour
+            d’autres patients.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="grid gap-2">

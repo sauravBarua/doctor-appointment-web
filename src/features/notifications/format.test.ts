@@ -39,6 +39,7 @@ describe('notificationHref', () => {
     expect(notificationHref({ ...booked, type: 'APPOINTMENT_CANCELLED' }, 'PATIENT')).toBe(
       '/appointments?tab=cancelled',
     );
-    expect(notificationHref(booked, 'DOCTOR')).toBeNull();
+    expect(notificationHref(booked, 'DOCTOR')).toBe('/doctor/appointments');
+    expect(notificationHref(booked, 'ADMIN')).toBeNull();
   });
 });

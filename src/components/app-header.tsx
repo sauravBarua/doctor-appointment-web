@@ -68,6 +68,19 @@ export function AppHeader() {
                     <Link href="/appointments">Mes rendez-vous</Link>
                   </DropdownMenuItem>
                 ) : null}
+                {user.role === 'DOCTOR' ? (
+                  <>
+                    <DropdownMenuItem asChild>
+                      <Link href="/doctor/appointments">Rendez-vous</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/doctor/schedule">Disponibilités</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/doctor/time-off">Congés</Link>
+                    </DropdownMenuItem>
+                  </>
+                ) : null}
                 <DropdownMenuItem onSelect={() => logout.mutate()}>
                   <LogOut className="size-4" /> Se déconnecter
                 </DropdownMenuItem>

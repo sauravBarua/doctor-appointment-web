@@ -25,7 +25,7 @@ type Tab = keyof typeof TABS;
 
 const isTab = (value: string | null): value is Tab => value !== null && value in TABS;
 
-export function AppointmentsList() {
+export function AppointmentsList({ viewer = 'PATIENT' }: { viewer?: 'PATIENT' | 'DOCTOR' }) {
   const { searchParams, update } = useCatalogParams();
   const raw = searchParams.get('tab');
   const tab: Tab = isTab(raw) ? raw : 'upcoming';
@@ -66,7 +66,7 @@ export function AppointmentsList() {
           <ErrorState error={error} onRetry={() => void appointments.refetch()} />
         ) : !data || data.items.length === 0 ? (
           <EmptyState title={TABS[tab].empty} description="Vos rendez-vous apparaîtront ici.">
-            {tab === 'upcoming' ? (
+            {tab === 'upcoming' && viewer === 'PATIENT' ? (
               <Button asChild>
                 <Link href="/doctors">Trouver un médecin</Link>
               </Button>
@@ -81,6 +81,7 @@ export function AppointmentsList() {
               {data.items.map((appointment) => (
                 <li key={appointment.id}>
                   <AppointmentCard
+                    viewer={viewer}
                     appointment={appointment}
                     onCancel={tab === 'upcoming' ? setToCancel : undefined}
                   />
@@ -97,7 +98,7 @@ export function AppointmentsList() {
         )}
       </TabsContent>
 
-      <CancelDialog appointment={toCancel} onClose={() => setToCancel(null)} />
+      <CancelDialog viewer={viewer} appointment={toCancel} onClose={() => setToCancel(null)} />
     </Tabs>
   );
 }

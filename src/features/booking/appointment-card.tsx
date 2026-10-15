@@ -18,9 +18,11 @@ const STATUS: Record<
 export function AppointmentCard({
   appointment,
   onCancel,
+  viewer = 'PATIENT',
 }: {
   appointment: Appointment;
   onCancel?: (appointment: Appointment) => void;
+  viewer?: 'PATIENT' | 'DOCTOR';
 }) {
   const { doctor, timezone, startTime, endTime, status } = appointment;
   return (
@@ -38,13 +40,19 @@ export function AppointmentCard({
         <div className="grid min-w-0 flex-1 gap-1">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="font-display text-lg leading-tight">
-              <Link href={`/doctors/${doctor.id}`} className="hover:underline">
-                {doctor.name}
-              </Link>
+              {viewer === 'DOCTOR' ? (
+                appointment.patient.name
+              ) : (
+                <Link href={`/doctors/${doctor.id}`} className="hover:underline">
+                  {doctor.name}
+                </Link>
+              )}
             </h3>
             <Badge variant={STATUS[status].variant}>{STATUS[status].label}</Badge>
           </div>
-          <p className="text-muted-foreground text-sm">{doctor.specialty}</p>
+          <p className="text-muted-foreground text-sm">
+            {viewer === 'DOCTOR' ? 'Patient' : doctor.specialty}
+          </p>
           <p className="text-sm font-medium">
             {capitalize(formatDateLong(startTime, timezone))} · {formatTime(startTime, timezone)} –{' '}
             {formatTime(endTime, timezone)}

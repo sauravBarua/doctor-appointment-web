@@ -1,13 +1,26 @@
 import { AppHeader } from '@/components/app-header';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { AppGate } from '@/features/auth/app-gate';
+import { AppSidebar } from '@/features/navigation/app-sidebar';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <AppGate>
-      <div className="flex min-h-dvh flex-col">
-        <AppHeader />
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">{children}</main>
-      </div>
+      <TooltipProvider delayDuration={0}>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <AppHeader />
+            <div className="flex h-10 items-center border-b px-3">
+              <SidebarTrigger />
+            </div>
+            <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+              {children}
+            </main>
+          </SidebarInset>
+        </SidebarProvider>
+      </TooltipProvider>
     </AppGate>
   );
 }

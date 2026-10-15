@@ -67,3 +67,42 @@ export function relativeTime(iso: string, now: Date = new Date()): string {
     timeZone: SITE.timezone,
   }).format(new Date(iso));
 }
+
+function offsetMinutes(timeZone: string, at: Date): number {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).formatToParts(at);
+  const value = (type: string) => Number(parts.find((part) => part.type === type)?.value);
+  const asUtc = Date.UTC(
+    value('year'),
+    value('month') - 1,
+    value('day'),
+    value('hour'),
+    value('minute'),
+    value('second'),
+  );
+  return Math.round((asUtc - at.getTime()) / 60_000);
+}
+
+// "2026-10-17" + "09:00" in Europe/Paris -> the real instant (07:00Z). Second pass handles DST changes.
+export function zonedToInstant(ymd: string, hm: string, timeZone: string): Date {
+  const wall = Date.parse(`${ymd}T${hm}:00Z`);
+  const first = wall - offsetMinutes(timeZone, new Date(wall)) * 60_000;
+  return new Date(wall - offsetMinutes(timeZone, new Date(first)) * 60_000);
+}
+
+// "Samedi 17 octobre 2026, 09:00 – 12:00" or "Du … au …" across days.
+export function formatPeriod(start: string, end: string, timeZone: string): string {
+  const sameDay = todayIn(timeZone, new Date(start)) === todayIn(timeZone, new Date(end));
+  if (sameDay) {
+    return `${capitalize(formatDateLong(start, timeZone))}, ${formatTime(start, timeZone)} – ${formatTime(end, timeZone)}`;
+  }
+  return `Du ${formatDateLong(start, timeZone)} à ${formatTime(start, timeZone)} au ${formatDateLong(end, timeZone)} à ${formatTime(end, timeZone)}`;
+}
